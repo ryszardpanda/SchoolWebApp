@@ -15,10 +15,8 @@ import java.io.Serializable;
 @Embeddable
 @EqualsAndHashCode
 public class ExamRatingKey implements Serializable {
-
     @Column(name = "student_id")
-    Long studentId;
-
+    private Long studentId;
     @Column(name = "exam_id")
-    Long examId;
+    private Long examId;
 }

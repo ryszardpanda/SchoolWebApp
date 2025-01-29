@@ -25,5 +25,5 @@ public class Students {
     private SchoolClass schoolClass;
 
     @OneToMany(mappedBy = "student")
-    Set<ExamRating> ratings;
+    private Set<ExamRating> ratings;
 }

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -20,11 +20,11 @@ public class Exam {
     @Column(name = "EXAM_NAME", length = 50, nullable = false)
     private String examName;
     @Column(name = "DATE_OF_EXAM", length = 50, nullable = false)
-    private LocalDate dateOfExam;
+    private LocalDateTime dateOfExam;
 
     @ManyToOne
     private Subject subject;
 
     @OneToMany(mappedBy = "exam")
-    Set<ExamRating> ratings;
+    private Set<ExamRating> ratings;
 }

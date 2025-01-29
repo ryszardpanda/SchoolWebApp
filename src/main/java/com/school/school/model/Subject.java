@@ -20,5 +20,5 @@ public class Subject {
     private String examName;
 
     @ManyToMany(mappedBy = "subjects")
-    Set<Teacher> teachers;
+    private Set<Teacher> teachers;
 }

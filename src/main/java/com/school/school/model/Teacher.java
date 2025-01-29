@@ -26,5 +26,5 @@ public class Teacher {
             name = "TEACHER_SUBJECT",
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
-    Set<Subject> subjects;
+    private Set<Subject> subjects;
 }
