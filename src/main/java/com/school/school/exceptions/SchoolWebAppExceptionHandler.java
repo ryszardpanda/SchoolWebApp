@@ -13,4 +13,11 @@ public class SchoolWebAppExceptionHandler {
         return new ResponseEntity<ErrorMessage>(
                 new ErrorMessage(ex.getMessage()), new HttpHeaders(), ex.getHttpStatus());
     }
+
+    @ExceptionHandler({SchoolClassNotFound.class})
+    public ResponseEntity<ErrorMessage> handleSchoolClassNotFound(
+            SchoolClassNotFound ex){
+        return new ResponseEntity<ErrorMessage>(
+                new ErrorMessage(ex.getMessage()), new HttpHeaders(), ex.getHttpStatus());
+    }
 }
