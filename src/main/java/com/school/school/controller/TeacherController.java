@@ -3,6 +3,7 @@ package com.school.school.controller;
 import com.school.school.exceptions.ErrorMessage;
 import com.school.school.mapper.TeacherMapper;
 import com.school.school.model.ExamDTO;
+import com.school.school.model.StudentDTO;
 import com.school.school.model.Teacher;
 import com.school.school.model.TeacherDTO;
 import com.school.school.service.TeacherService;
@@ -107,5 +108,24 @@ public class TeacherController {
     @GetMapping("/getById/{id}")
     public TeacherDTO getTeacherById(@PathVariable Long id) {
         return teacherMapper.teacherToTeacherDTO(teacherService.getTeacherById(id));
+    }
+
+    @Operation(summary = "Assign Teacher to subject", tags = "Teacher")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Teacher assigned to class",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = StudentDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))}),
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = {@Content})
+    })
+    @PatchMapping("/{teacherId}/assign-subject/{subjectId}")
+    public TeacherDTO assignTeacherToSubject(@PathVariable Long teacherId, @PathVariable Long subjectId) {
+        return teacherMapper.teacherToTeacherDTO(teacherService.assignTeacherToSubject(teacherId, subjectId));
     }
 }

@@ -1,17 +1,19 @@
 package com.school.school.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "SUBJECT")
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "subjectName"})
 public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,5 +22,5 @@ public class Subject {
     private String subjectName;
 
     @ManyToMany(mappedBy = "subjects")
-    private Set<Teacher> teachers;
+    private Set<Teacher> teachers = new HashSet<>();
 }
