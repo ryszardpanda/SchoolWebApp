@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -16,4 +18,7 @@ public class SchoolClass {
     private Long id;
     @Column(name = "CLASS_NAME", length = 50, nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "schoolClass")
+    private List<Student> students;
 }

@@ -109,4 +109,23 @@ public class StudentController {
     public StudentDTO getStudentById(@PathVariable Long id) {
         return studentMapper.studentTostudentDTO(studentService.getStudentById(id));
     }
+
+    @Operation(summary = "Assign student to class", tags = "Student")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Student assigned to class",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = StudentDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Student with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))}),
+            @ApiResponse(responseCode = "404", description = "Class with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = {@Content})
+    })
+    @PatchMapping("/{studentId}/assign-class/{classId}")
+    public StudentDTO assignStudentToClass(@PathVariable Long studentId, @PathVariable Long classId){
+        return studentMapper.studentTostudentDTO(studentService.assignStudentToClass(studentId,classId));
+    }
 }

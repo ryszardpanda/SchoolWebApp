@@ -1,9 +1,12 @@
 package com.school.school.service;
 
+import com.school.school.exceptions.SchoolClassNotFound;
 import com.school.school.exceptions.StudentNotFoundException;
 import com.school.school.mapper.StudentMapper;
+import com.school.school.model.SchoolClass;
 import com.school.school.model.Student;
 import com.school.school.model.StudentDTO;
+import com.school.school.repository.SchoolClassRepository;
 import com.school.school.repository.StudentsRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class StudentService {
     private final StudentsRepository studentsRepository;
+    private final SchoolClassRepository classRepository;
     private final StudentMapper studentMapper;
 
     @Transactional
@@ -49,5 +53,15 @@ public class StudentService {
         Student student = studentsRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
                 HttpStatus.NOT_FOUND));
         return student;
+    }
+
+    @Transactional
+    public Student assignStudentToClass(Long studentId, Long studentClassId){
+        Student student = studentsRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
+                HttpStatus.NOT_FOUND));
+        SchoolClass schoolClass = classRepository.findById(studentClassId).orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
+                HttpStatus.NOT_FOUND));
+        student.setSchoolClass(schoolClass);
+        return studentsRepository.save(student);
     }
 }

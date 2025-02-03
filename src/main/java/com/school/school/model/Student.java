@@ -22,6 +22,7 @@ public class Student {
     private String lastName;
 
     @ManyToOne
+    @JoinColumn(name = "class_id")
     private SchoolClass schoolClass;
 
     @OneToMany(mappedBy = "student")
