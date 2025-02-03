@@ -6,15 +6,17 @@ import com.school.school.model.SchoolClass;
 import com.school.school.model.SchoolClassDTO;
 import com.school.school.repository.SchoolClassRepository;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SchoolClassService {
-    private SchoolClassRepository schoolClassRepository;
-    private SchoolClassMapper schoolClassMapper;
+    private final SchoolClassRepository schoolClassRepository;
+    private final SchoolClassMapper schoolClassMapper;
 
     @Transactional
     public SchoolClass addSchoolClass(SchoolClassDTO schoolClassDTO) {

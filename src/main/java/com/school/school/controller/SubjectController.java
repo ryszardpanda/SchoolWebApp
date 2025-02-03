@@ -1,16 +1,17 @@
 package com.school.school.controller;
 
 import com.school.school.exceptions.ErrorMessage;
-import com.school.school.mapper.SchoolClassMapper;
+import com.school.school.mapper.SubjectMapper;
 import com.school.school.model.ExamDTO;
-import com.school.school.model.SchoolClass;
-import com.school.school.model.SchoolClassDTO;
-import com.school.school.service.SchoolClassService;
+import com.school.school.model.Subject;
+import com.school.school.model.SubjectDTO;
+import com.school.school.service.SubjectService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Page;
@@ -18,18 +19,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/school-class")
+@RequestMapping("/subject")
 @RequiredArgsConstructor
-public class SchoolClassController {
-    private final SchoolClassService schoolClassService;
-    private final SchoolClassMapper schoolClassMapper;
+public class SubjectController {
+    private final SubjectService subjectService;
+    private final SubjectMapper subjectMapper;
 
-    @Operation(summary = "Add SchoolClass", tags = "School Class")
+    @Operation(summary = "Add Subject", tags = "Subject")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "School class added",
+            @ApiResponse(responseCode = "200", description = "Subject added",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
@@ -37,15 +38,15 @@ public class SchoolClassController {
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
     @PostMapping("/add")
-    public SchoolClassDTO addSchoolClass(@RequestBody SchoolClassDTO schoolClassDTO){
-        return schoolClassMapper.schoolClassToSchoolClassDTO(schoolClassService.addSchoolClass(schoolClassDTO));
+    public SubjectDTO addSubject(@Valid @RequestBody SubjectDTO subjectDTO){
+        return subjectMapper.subjectToSubjectDTO(subjectService.addSubject(subjectDTO));
     }
 
-    @Operation(summary = "Delete School Class", tags = "School Class")
+    @Operation(summary = "Delete Subject", tags = "Subject")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "School Class deleted",
+            @ApiResponse(responseCode = "200", description = "Subject deleted",
                     content = {@Content}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
@@ -53,16 +54,16 @@ public class SchoolClassController {
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
     @DeleteMapping("/delete/{id}")
-    public void deleteSchoolClassById(@PathVariable Long id){
-        schoolClassService.deleteSchoolById(id);
+    public void deleteSubjectById(@PathVariable Long id){
+        subjectService.deleteSubjectById(id);
     }
 
-    @Operation(summary = "School Class update", tags = "School Class")
+    @Operation(summary = "Update Subject", tags = "Subject")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "School Class updated",
+            @ApiResponse(responseCode = "200", description = "Subject updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
@@ -70,42 +71,42 @@ public class SchoolClassController {
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
     @PutMapping("/update/{id}")
-    public SchoolClassDTO updateSchoolClassById(@PathVariable Long id, @RequestBody SchoolClassDTO schoolClassDTO){
-        return schoolClassMapper.schoolClassToSchoolClassDTO(schoolClassService.updateSchoolById(id, schoolClassDTO));
+    public SubjectDTO updateSubjectById(@PathVariable Long id, @RequestBody SubjectDTO subjectDTO){
+        return subjectMapper.subjectToSubjectDTO(subjectService.updateSubject(id, subjectDTO));
     }
 
-    @Operation(summary = "Get School Classes", tags = "School Class")
+    @Operation(summary = "Get Subjects", tags = "Subject")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "School Class returned",
+            @ApiResponse(responseCode = "200", description = "Subject returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @GetMapping("/get")
-    public Page<SchoolClassDTO> getExams(@ParameterObject Pageable pageable){
-        Page<SchoolClass> schoolClasses = schoolClassService.getSchoolClasses(pageable);
-        return schoolClasses.map(schoolClassMapper::schoolClassToSchoolClassDTO);
+    @GetMapping("get")
+    public Page<SubjectDTO> getSubjects(@ParameterObject Pageable pageable){
+        Page<Subject> subject = subjectService.getSubject(pageable);
+        return subject.map(subjectMapper::subjectToSubjectDTO);
     }
 
-    @Operation(summary = "Get School Class by id", tags = "School Class")
+    @Operation(summary = "Get Subject by id", tags = "Subject")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "School Class returned",
+            @ApiResponse(responseCode = "200", description = "Subject returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @GetMapping("/getById/{id}")
-    public SchoolClassDTO getSchoolClassById(@PathVariable Long id){
-        return schoolClassMapper.schoolClassToSchoolClassDTO(schoolClassService.getSchoolClassById(id));
+    @GetMapping("getById/{id}")
+    public SubjectDTO getSubjectById(@PathVariable Long id){
+        return subjectMapper.subjectToSubjectDTO(subjectService.getSubjectById(id));
     }
 }

@@ -86,7 +86,7 @@ public class ExamController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @GetMapping("get")
+    @GetMapping("/get")
     public Page<ExamDTO> getExams(@ParameterObject Pageable pageable){
         Page<Exam> exams = examService.getExams(pageable);
         return exams.map(examMapper::examToExamDTO);
@@ -104,7 +104,7 @@ public class ExamController {
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @GetMapping("getById/{id}")
+    @GetMapping("/getById/{id}")
     public ExamDTO getExamById(@PathVariable Long id){
         return examMapper.examToExamDTO(examService.getExamById(id));
     }

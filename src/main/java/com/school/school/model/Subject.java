@@ -17,7 +17,7 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "SUBJECT_NAME", length = 50, nullable = false)
-    private String examName;
+    private String subjectName;
 
     @ManyToMany(mappedBy = "subjects")
     private Set<Teacher> teachers;
