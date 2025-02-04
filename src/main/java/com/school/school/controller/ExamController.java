@@ -131,4 +131,25 @@ public class ExamController {
     public ExamRatingDTO assignExamRating(@PathVariable Long examId, @RequestParam Long studentId, @RequestParam int rating) {
        return examRatingMapper.examRatingToExamRatingDTO(examService.assignExamRating(studentId, examId, rating));
     }
+
+    @Operation(summary = "Assign subject to exam", tags = "Exam")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subject to exam assigned",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExamRatingDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)) }),
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)) }),
+    })
+    @PatchMapping("/{examId}/assign-subject/{subjectId}")
+    public ExamDTO assignSubject(@PathVariable Long examId, @PathVariable Long subjectId) {
+        Exam updatedExam = examService.assignSubjectToExam(examId, subjectId);
+        return examMapper.examToExamDTO(updatedExam);
+    }
 }

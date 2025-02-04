@@ -2,11 +2,13 @@ package com.school.school.service;
 
 import com.school.school.exceptions.ExamNotFoundException;
 import com.school.school.exceptions.StudentNotFoundException;
+import com.school.school.exceptions.SubjectNotFoundException;
 import com.school.school.mapper.ExamMapper;
 import com.school.school.model.*;
 import com.school.school.repository.ExamRatingRepository;
 import com.school.school.repository.ExamRepository;
 import com.school.school.repository.StudentsRepository;
+import com.school.school.repository.SubjectRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ public class ExamService {
     private final ExamMapper examMapper;
     private final StudentsRepository studentsRepository;
     private final ExamRatingRepository examRatingRepository;
+    private final SubjectRepository subjectRepository;
 
     @Transactional
     public Exam addExam(ExamDTO examDTO) {
@@ -73,5 +76,16 @@ public class ExamService {
         examRating.setRating(rating);
 
         return examRatingRepository.save(examRating);
+    }
+
+    @Transactional
+    public Exam assignSubjectToExam(Long examId, Long subjectId) {
+        Exam exam = examRepository.findById(examId)
+                .orElseThrow(() -> new ExamNotFoundException("Exam not found", HttpStatus.NOT_FOUND));
+
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject not found", HttpStatus.NOT_FOUND));
+        exam.setSubject(subject);
+        return examRepository.save(exam);
     }
 }

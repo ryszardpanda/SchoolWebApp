@@ -2,9 +2,8 @@ package com.school.school.controller;
 
 import com.school.school.exceptions.ErrorMessage;
 import com.school.school.mapper.StudentMapper;
-import com.school.school.model.ExamDTO;
-import com.school.school.model.Student;
-import com.school.school.model.StudentDTO;
+import com.school.school.mapper.SubjectMapper;
+import com.school.school.model.*;
 import com.school.school.service.StudentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,12 +17,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Set;
+
 @RestController
 @RequestMapping("/student")
 @RequiredArgsConstructor
 public class StudentController {
     private final StudentService studentService;
     private final StudentMapper studentMapper;
+    private final SubjectMapper subjectMapper;
 
     @Operation(summary = "Add Student", tags = "Student")
     @ApiResponses(value = {
@@ -127,5 +130,27 @@ public class StudentController {
     @PatchMapping("/{studentId}/assign-class/{classId}")
     public StudentDTO assignStudentToClass(@PathVariable Long studentId, @PathVariable Long classId){
         return studentMapper.studentTostudentDTO(studentService.assignStudentToClass(studentId,classId));
+    }
+
+    @Operation(summary = "Get subjects of student", tags = "Student")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Subjects of studentd returned",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = StudentDTO.class)) }),
+            @ApiResponse(responseCode = "404", description = "Student with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class))}),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = {@Content})
+    })
+    @GetMapping("/{studentId}/subjects")
+    public Set<SubjectDTO> getSubjectsForStudent(@PathVariable Long studentId) {
+        Set<Subject> subjects = studentService.getAllSubjectsForStudent(studentId);
+        return subjectMapper.toSubjectDTOs(subjects);
+    }
+
+    @GetMapping("/{studentId}/exam-ratings")
+    public List<ExamRatingDetailsDTO> getExamRatingsForStudent(@PathVariable Long studentId) {
+        return studentService.getAllExamRatingsForStudent(studentId);
     }
 }
