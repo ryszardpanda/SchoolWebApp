@@ -1,17 +1,18 @@
 package com.school.school.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
 @Entity
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id", "examName", "dateOfExam"})
 @Table(name = "EXAM")
 public class Exam {
     @Id

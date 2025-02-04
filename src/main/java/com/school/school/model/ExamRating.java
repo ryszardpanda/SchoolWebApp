@@ -1,13 +1,14 @@
 package com.school.school.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = "id")
+@ToString(of = {"id"})
 @Entity
 @Table(name = "EXAM_RATING")
 public class ExamRating {

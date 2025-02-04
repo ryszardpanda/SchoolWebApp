@@ -61,7 +61,6 @@ public class TeacherService {
         Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new SubjectNotFoundException("Subject with this id not found",
                 HttpStatus.NOT_FOUND));
        teacher.getSubjects().add(subject);
-      // teacherRepository.save(teacher);
        return teacher;
     }
 }

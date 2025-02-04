@@ -2,8 +2,10 @@ package com.school.school.controller;
 
 import com.school.school.exceptions.ErrorMessage;
 import com.school.school.mapper.ExamMapper;
+import com.school.school.mapper.ExamRatingMapper;
 import com.school.school.model.Exam;
 import com.school.school.model.ExamDTO;
+import com.school.school.model.ExamRatingDTO;
 import com.school.school.service.ExamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class ExamController {
     private final ExamService examService;
     private final ExamMapper examMapper;
+    private final ExamRatingMapper examRatingMapper;
 
     @Operation(summary = "Add Exam", tags = "Exam")
     @ApiResponses(value = {
@@ -107,5 +110,25 @@ public class ExamController {
     @GetMapping("/getById/{id}")
     public ExamDTO getExamById(@PathVariable Long id){
         return examMapper.examToExamDTO(examService.getExamById(id));
+    }
+
+    @Operation(summary = "Assign rating", tags = "Exam")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Exam rating assigned",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ExamRatingDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Student with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)) }),
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)) }),
+            @ApiResponse(responseCode = "400", description = "Bad request",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessage.class)) }),
+    })
+    @PostMapping("/{examId}/assign-rating")
+    public ExamRatingDTO assignExamRating(@PathVariable Long examId, @RequestParam Long studentId, @RequestParam int rating) {
+       return examRatingMapper.examRatingToExamRatingDTO(examService.assignExamRating(studentId, examId, rating));
     }
 }
