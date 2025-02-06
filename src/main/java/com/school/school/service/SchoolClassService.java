@@ -26,7 +26,8 @@ public class SchoolClassService {
 
     @Transactional
     public void deleteSchoolById(Long id) {
-        SchoolClass schoolClass = schoolClassRepository.findById(id).orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
+        SchoolClass schoolClass = schoolClassRepository.findById(id)
+                .orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
                 HttpStatus.NOT_FOUND));
         schoolClassRepository.delete(schoolClass);
     }
@@ -34,7 +35,8 @@ public class SchoolClassService {
     @Transactional
     public SchoolClass updateSchoolById(Long id, SchoolClassDTO schoolClassDTO){
         SchoolClass schoolClass = schoolClassMapper.schoolClassDTOtoSchoolClass(schoolClassDTO);
-        SchoolClass schoolClassById = schoolClassRepository.findById(id).orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
+        SchoolClass schoolClassById = schoolClassRepository.findById(id)
+                .orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
                 HttpStatus.NOT_FOUND));
         schoolClassById.setName(schoolClassDTO.getName());
         return schoolClassById;
@@ -45,7 +47,8 @@ public class SchoolClassService {
     }
 
     public SchoolClass getSchoolClassById(Long id){
-        SchoolClass schoolClass = schoolClassRepository.findById(id).orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
+        SchoolClass schoolClass = schoolClassRepository.findById(id)
+                .orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
                 HttpStatus.NOT_FOUND));
         return schoolClass;
     }

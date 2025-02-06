@@ -12,11 +12,12 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "TEACHER")
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(of = {"id", "firstName", "lastName"})
 public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     @Column(name = "FIRST_NAME", length = 50, nullable = false)
     private String firstName;

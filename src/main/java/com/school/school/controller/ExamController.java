@@ -20,7 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/exam")
+@RequestMapping("/exams")
 @RequiredArgsConstructor
 public class ExamController {
     private final ExamService examService;
@@ -32,14 +32,14 @@ public class ExamController {
             @ApiResponse(responseCode = "200", description = "Exam added",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PostMapping("/add")
+    @PostMapping("")
     public ExamDTO addExam(@Valid @RequestBody ExamDTO examDTO){
        return examMapper.examToExamDTO(examService.addExam(examDTO));
     }
@@ -48,14 +48,14 @@ public class ExamController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Exam deleted",
                     content = {@Content}),
-            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteExamById(@PathVariable Long id){
         examService.deleteExamById(id);
     }
@@ -65,14 +65,14 @@ public class ExamController {
             @ApiResponse(responseCode = "200", description = "Exam updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ExamDTO updateExamById(@PathVariable Long id, @RequestBody ExamDTO examDTO){
         return examMapper.examToExamDTO(examService.updateExam(id, examDTO));
     }
@@ -82,14 +82,14 @@ public class ExamController {
             @ApiResponse(responseCode = "200", description = "Exams returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @GetMapping("/get")
+    @GetMapping()
     public Page<ExamDTO> getExams(@ParameterObject Pageable pageable){
         Page<Exam> exams = examService.getExams(pageable);
         return exams.map(examMapper::examToExamDTO);
@@ -100,10 +100,10 @@ public class ExamController {
             @ApiResponse(responseCode = "200", description = "Exam returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
@@ -117,18 +117,18 @@ public class ExamController {
             @ApiResponse(responseCode = "200", description = "Exam rating assigned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamRatingDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Student with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Student with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PostMapping("/{examId}/assign-rating")
-    public ExamRatingDTO assignExamRating(@PathVariable Long examId, @RequestParam Long studentId, @RequestParam int rating) {
+    @PostMapping("/{examId}/scores")
+    public ExamRatingDTO assignExamRating(@PathVariable Long examId, @RequestParam Long studentId, @RequestBody int rating) {
        return examRatingMapper.examRatingToExamRatingDTO(examService.assignExamRating(studentId, examId, rating));
     }
 
@@ -137,17 +137,17 @@ public class ExamController {
             @ApiResponse(responseCode = "200", description = "Subject to exam assigned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamRatingDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Exam with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PatchMapping("/{examId}/assign-subject/{subjectId}")
+    @PatchMapping("/{examId}/subject/{subjectId}")
     public ExamDTO assignSubject(@PathVariable Long examId, @PathVariable Long subjectId) {
         Exam updatedExam = examService.assignSubjectToExam(examId, subjectId);
         return examMapper.examToExamDTO(updatedExam);

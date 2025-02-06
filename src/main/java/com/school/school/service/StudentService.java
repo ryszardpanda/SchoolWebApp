@@ -6,7 +6,6 @@ import com.school.school.mapper.StudentMapper;
 import com.school.school.model.*;
 import com.school.school.repository.SchoolClassRepository;
 import com.school.school.repository.StudentsRepository;
-import com.school.school.repository.SubjectRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +32,8 @@ public class StudentService {
 
     @Transactional
     public void deleteStudentById(Long id) {
-        Student student = studentsRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
+        Student student = studentsRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
                 HttpStatus.NOT_FOUND));
         studentsRepository.delete(student);
     }
@@ -41,7 +41,8 @@ public class StudentService {
     @Transactional
     public Student updateStudentById(Long id, StudentDTO studentDTO) {
         Student updatedStudent = studentMapper.studentDTOtoStudent(studentDTO);
-        Student student = studentsRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
+        Student student = studentsRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
                 HttpStatus.NOT_FOUND));
         student.setFirstName(updatedStudent.getFirstName());
         student.setLastName(updatedStudent.getLastName());
@@ -53,16 +54,19 @@ public class StudentService {
     }
 
     public Student getStudentById(Long id) {
-        Student student = studentsRepository.findById(id).orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
+        Student student = studentsRepository.findById(id)
+                .orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
                 HttpStatus.NOT_FOUND));
         return student;
     }
 
     @Transactional
     public Student assignStudentToClass(Long studentId, Long studentClassId) {
-        Student student = studentsRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
+        Student student = studentsRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
                 HttpStatus.NOT_FOUND));
-        SchoolClass schoolClass = classRepository.findById(studentClassId).orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
+        SchoolClass schoolClass = classRepository.findById(studentClassId)
+                .orElseThrow(() -> new SchoolClassNotFound("School class with this id not found",
                 HttpStatus.NOT_FOUND));
         student.setSchoolClass(schoolClass);
         return studentsRepository.save(student);
@@ -87,8 +91,8 @@ public class StudentService {
 
         return student.getRatings()
                 .stream()
-                .map(er -> {
-                    Exam exam = er.getExam();
+                .map(examRating -> {
+                    Exam exam = examRating.getExam();
                     Subject subject = exam.getSubject();
 
                     return new ExamRatingDetailsDTO(
@@ -96,7 +100,7 @@ public class StudentService {
                             exam.getExamName(),
                             exam.getDateOfExam(),
                             (subject != null ? subject.getSubjectName() : null),
-                            er.getRating()
+                            examRating.getRating()
                     );
                 })
                 .collect(Collectors.toList());

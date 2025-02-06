@@ -9,13 +9,14 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(of = {"id", "firstName", "lastName"})
 @Entity
 @Table(name = "STUDENTS")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
     @Column(name = "FIRST_NAME", length = 50, nullable = false)
     private String firstName;

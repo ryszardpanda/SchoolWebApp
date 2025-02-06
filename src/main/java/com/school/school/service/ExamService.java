@@ -33,16 +33,18 @@ public class ExamService {
 
     @Transactional
     public void deleteExamById(Long id) {
-        Exam examById = examRepository.findById(id).orElseThrow(() -> new ExamNotFoundException("Exam with this id not found",
-                HttpStatus.NOT_FOUND));
+        Exam examById = examRepository.findById(id)
+                .orElseThrow(() -> new ExamNotFoundException("Exam with this id not found",
+                        HttpStatus.NOT_FOUND));
         examRepository.delete(examById);
     }
 
     @Transactional
     public Exam updateExam(Long id, ExamDTO examDTO) {
         Exam updatedExam = examMapper.examDTOtoExam(examDTO);
-        Exam examById = examRepository.findById(id).orElseThrow(() -> new ExamNotFoundException("Exam with this id not found",
-                HttpStatus.NOT_FOUND));
+        Exam examById = examRepository.findById(id)
+                .orElseThrow(() -> new ExamNotFoundException("Exam with this id not found",
+                        HttpStatus.NOT_FOUND));
         examById.setExamName(updatedExam.getExamName());
         examById.setDateOfExam(updatedExam.getDateOfExam());
         return examById;
@@ -53,26 +55,24 @@ public class ExamService {
     }
 
     public Exam getExamById(Long id) {
-        Exam exam = examRepository.findById(id).orElseThrow(() -> new ExamNotFoundException("Exam with this id is not found",
-                HttpStatus.NOT_FOUND));
+        Exam exam = examRepository.findById(id)
+                .orElseThrow(() -> new ExamNotFoundException("Exam with this id is not found",
+                        HttpStatus.NOT_FOUND));
         return exam;
     }
 
     @Transactional
     public ExamRating assignExamRating(Long studentId, Long examId, int rating) {
-        Student student = studentsRepository.findById(studentId).orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist",
-                HttpStatus.NOT_FOUND));
-        Exam exam = examRepository.findById(examId).orElseThrow(() -> new ExamNotFoundException("Exam with this id is not found",
-                HttpStatus.NOT_FOUND));
+        Student student = studentsRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException("Student with this id doesnt exist", HttpStatus.NOT_FOUND));
+        Exam exam = examRepository.findById(examId)
+                .orElseThrow(() -> new ExamNotFoundException("Exam with this id is not found", HttpStatus.NOT_FOUND));
 
         ExamRatingKey key = new ExamRatingKey(studentId, examId);
 
         ExamRating examRating = examRatingRepository.findById(key)
-                .orElse(new ExamRating());
+                .orElseGet(() -> ExamRating.create(student, exam, rating));
 
-        examRating.setId(key);
-        examRating.setStudent(student);
-        examRating.setExam(exam);
         examRating.setRating(rating);
 
         return examRatingRepository.save(examRating);

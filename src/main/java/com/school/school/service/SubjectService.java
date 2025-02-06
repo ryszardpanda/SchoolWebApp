@@ -18,7 +18,6 @@ public class SubjectService {
     private final SubjectRepository subjectRepository;
     private final SubjectMapper subjectMapper;
 
-
     @Transactional
     public Subject addSubject(SubjectDTO subjectDTO) {
         Subject subject = subjectMapper.subjectDTOtoSubject(subjectDTO);
@@ -27,18 +26,19 @@ public class SubjectService {
 
     @Transactional
     public void deleteSubjectById(Long id) {
-        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject with this id not found",
-                HttpStatus.NOT_FOUND));
+        Subject subject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject with this id not found",
+                        HttpStatus.NOT_FOUND));
         subjectRepository.delete(subject);
     }
 
     @Transactional
     public Subject updateSubject(Long id, SubjectDTO subjectDTO) {
-        Subject updatedSubject = subjectMapper.subjectDTOtoSubject(subjectDTO);
-        Subject subjectById = subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject with this id not found",
-                HttpStatus.NOT_FOUND));
-        subjectById.setSubjectName(updatedSubject.getSubjectName());
-        return subjectById;
+        Subject subjectById = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject with this id not found",
+                        HttpStatus.NOT_FOUND));
+        subjectById.setSubjectName(subjectDTO.getSubjectName());
+        return subjectRepository.save(subjectById);
     }
 
     public Page<Subject> getSubject(Pageable pageable) {
@@ -46,8 +46,9 @@ public class SubjectService {
     }
 
     public Subject getSubjectById(Long id) {
-        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new SubjectNotFoundException("Subject with this id is not found",
-                HttpStatus.NOT_FOUND));
+        Subject subject = subjectRepository.findById(id)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject with this id is not found",
+                        HttpStatus.NOT_FOUND));
         return subject;
     }
 }

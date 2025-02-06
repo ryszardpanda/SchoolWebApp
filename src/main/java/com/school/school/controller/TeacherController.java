@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/teacher")
+@RequestMapping("/teachers")
 @RequiredArgsConstructor
 public class TeacherController {
     private final TeacherService teacherService;
@@ -30,14 +30,14 @@ public class TeacherController {
             @ApiResponse(responseCode = "200", description = "Teacher added",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
     })
-    @PostMapping("/add")
+    @PostMapping()
     public TeacherDTO addTeacher(@RequestBody TeacherDTO teacherDTO) {
         return teacherMapper.teacherToTeacherDTO(teacherService.addTeacher(teacherDTO));
     }
@@ -46,14 +46,14 @@ public class TeacherController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Teacher deleted",
                     content = {@Content}),
-            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
     })
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteTeacher(@PathVariable Long id) {
         teacherService.deleteTeacherById(id);
     }
@@ -63,14 +63,14 @@ public class TeacherController {
             @ApiResponse(responseCode = "200", description = "Teacher updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
     })
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public TeacherDTO updateTeacher(@PathVariable Long id, @RequestBody TeacherDTO teacherDTO) {
         return teacherMapper.teacherToTeacherDTO(teacherService.updateTeacherById(id, teacherDTO));
     }
@@ -80,14 +80,14 @@ public class TeacherController {
             @ApiResponse(responseCode = "200", description = "Teacher returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
     })
-    @GetMapping("/get")
+    @GetMapping()
     public Page<TeacherDTO> getTeachers(@ParameterObject Pageable pageable) {
         Page<Teacher> teachers = teacherService.getTeachers(pageable);
         return teachers.map(teacherMapper::teacherToTeacherDTO);
@@ -98,10 +98,10 @@ public class TeacherController {
             @ApiResponse(responseCode = "200", description = "Teacher returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
     })
@@ -115,16 +115,16 @@ public class TeacherController {
             @ApiResponse(responseCode = "200", description = "Teacher assigned to class",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = StudentDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Teacher with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
-            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class))}),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content})
     })
-    @PatchMapping("/{teacherId}/assign-subject/{subjectId}")
+    @PatchMapping("/{teacherId}/subject/{subjectId}")
     public TeacherDTO assignTeacherToSubject(@PathVariable Long teacherId, @PathVariable Long subjectId) {
         return teacherMapper.teacherToTeacherDTO(teacherService.assignTeacherToSubject(teacherId, subjectId));
     }

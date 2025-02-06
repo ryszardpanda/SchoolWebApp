@@ -19,7 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/subject")
+@RequestMapping("/subjects")
 @RequiredArgsConstructor
 public class SubjectController {
     private final SubjectService subjectService;
@@ -30,14 +30,14 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Subject added",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PostMapping("/add")
+    @PostMapping()
     public SubjectDTO addSubject(@Valid @RequestBody SubjectDTO subjectDTO){
         return subjectMapper.subjectToSubjectDTO(subjectService.addSubject(subjectDTO));
     }
@@ -46,14 +46,14 @@ public class SubjectController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Subject deleted",
                     content = {@Content}),
-            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteSubjectById(@PathVariable Long id){
         subjectService.deleteSubjectById(id);
     }
@@ -63,14 +63,14 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Subject updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public SubjectDTO updateSubjectById(@PathVariable Long id, @RequestBody SubjectDTO subjectDTO){
         return subjectMapper.subjectToSubjectDTO(subjectService.updateSubject(id, subjectDTO));
     }
@@ -80,14 +80,14 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Subject returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @GetMapping("get")
+    @GetMapping()
     public Page<SubjectDTO> getSubjects(@ParameterObject Pageable pageable){
         Page<Subject> subject = subjectService.getSubject(pageable);
         return subject.map(subjectMapper::subjectToSubjectDTO);
@@ -98,10 +98,10 @@ public class SubjectController {
             @ApiResponse(responseCode = "200", description = "Subject returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "Subject with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })

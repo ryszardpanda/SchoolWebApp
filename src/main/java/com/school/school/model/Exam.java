@@ -11,7 +11,6 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
-@EqualsAndHashCode(of = "id")
 @ToString(of = {"id", "examName", "dateOfExam"})
 @Table(name = "EXAM")
 public class Exam {
@@ -28,4 +27,23 @@ public class Exam {
 
     @OneToMany(mappedBy = "exam")
     private Set<ExamRating> ratings;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Exam))
+            return false;
+
+        Exam other = (Exam) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

@@ -30,7 +30,8 @@ public class TeacherService {
 
     @Transactional
     public void deleteTeacherById(Long id) {
-        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new TeacherNotFoundException("Teacher with this ID doesnt exist",
+        Teacher teacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher with this ID doesnt exist",
                 HttpStatus.NOT_FOUND));
         teacherRepository.delete(teacher);
     }
@@ -38,7 +39,8 @@ public class TeacherService {
     @Transactional
     public Teacher updateTeacherById(Long id, TeacherDTO teacherDTO) {
         Teacher updatedTeacher = teacherMapper.teacherDTOtoTeacher(teacherDTO);
-        Teacher teacher = teacherRepository.findById(id).orElseThrow(() -> new TeacherNotFoundException("Teacher with this ID doesnt exist",
+        Teacher teacher = teacherRepository.findById(id)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher with this ID doesnt exist",
                 HttpStatus.NOT_FOUND));
         teacher.setFirstName(updatedTeacher.getFirstName());
         teacher.setLastName(updatedTeacher.getLastName());
@@ -56,9 +58,11 @@ public class TeacherService {
 
     @Transactional
     public Teacher assignTeacherToSubject(Long teacherId, Long subjectId){
-        Teacher teacher = teacherRepository.findById(teacherId).orElseThrow(() -> new TeacherNotFoundException("Teacher with this ID doesnt exist",
+        Teacher teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new TeacherNotFoundException("Teacher with this ID doesnt exist",
                 HttpStatus.NOT_FOUND));
-        Subject subject = subjectRepository.findById(subjectId).orElseThrow(() -> new SubjectNotFoundException("Subject with this id not found",
+        Subject subject = subjectRepository.findById(subjectId)
+                .orElseThrow(() -> new SubjectNotFoundException("Subject with this id not found",
                 HttpStatus.NOT_FOUND));
        teacher.getSubjects().add(subject);
        return teacher;

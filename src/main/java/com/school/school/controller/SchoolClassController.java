@@ -18,7 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/school-class")
+@RequestMapping("/school-classes")
 @RequiredArgsConstructor
 public class SchoolClassController {
     private final SchoolClassService schoolClassService;
@@ -29,14 +29,14 @@ public class SchoolClassController {
             @ApiResponse(responseCode = "200", description = "School class added",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "School class with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
             @ApiResponse(responseCode = "400", description = "Bad request",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PostMapping("/add")
+    @PostMapping()
     public SchoolClassDTO addSchoolClass(@RequestBody SchoolClassDTO schoolClassDTO){
         return schoolClassMapper.schoolClassToSchoolClassDTO(schoolClassService.addSchoolClass(schoolClassDTO));
     }
@@ -45,14 +45,14 @@ public class SchoolClassController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "School Class deleted",
                     content = {@Content}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteSchoolClassById(@PathVariable Long id){
         schoolClassService.deleteSchoolById(id);
     }
@@ -62,14 +62,14 @@ public class SchoolClassController {
             @ApiResponse(responseCode = "200", description = "School Class updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public SchoolClassDTO updateSchoolClassById(@PathVariable Long id, @RequestBody SchoolClassDTO schoolClassDTO){
         return schoolClassMapper.schoolClassToSchoolClassDTO(schoolClassService.updateSchoolById(id, schoolClassDTO));
     }
@@ -79,14 +79,14 @@ public class SchoolClassController {
             @ApiResponse(responseCode = "200", description = "School Class returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
-    @GetMapping("/get")
+    @GetMapping()
     public Page<SchoolClassDTO> getExams(@ParameterObject Pageable pageable){
         Page<SchoolClass> schoolClasses = schoolClassService.getSchoolClasses(pageable);
         return schoolClasses.map(schoolClassMapper::schoolClassToSchoolClassDTO);
@@ -97,10 +97,10 @@ public class SchoolClassController {
             @ApiResponse(responseCode = "200", description = "School Class returned",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ExamDTO.class))}),
-            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesnt exist",
+            @ApiResponse(responseCode = "404", description = "School Class with provided Id doesn't exist",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
-            @ApiResponse(responseCode = "400", description = "Bad request",
+            @ApiResponse(responseCode = "400", description = "Bad request, check data and try again",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = ErrorMessage.class)) }),
     })
