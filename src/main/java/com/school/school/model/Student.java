@@ -9,7 +9,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(of = {"id", "firstName", "lastName"})
 @Entity
 @Table(name = "STUDENTS")
@@ -29,4 +28,21 @@ public class Student {
 
     @OneToMany(mappedBy = "student")
     private Set<ExamRating> ratings;
+
+    public boolean equals(Student o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Student))
+            return false;
+
+        Student other = (Student) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
