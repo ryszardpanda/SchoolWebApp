@@ -12,7 +12,6 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "TEACHER")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(of = {"id", "firstName", "lastName"})
 public class Teacher {
     @Id
@@ -30,4 +29,21 @@ public class Teacher {
             joinColumns = @JoinColumn(name = "teacher_id"),
             inverseJoinColumns = @JoinColumn(name = "subject_id"))
     private Set<Subject> subjects = new HashSet<>();
+
+    public boolean equals(Teacher o) {
+        if (this == o) return true;
+
+        if (!(o instanceof Teacher))
+            return false;
+
+        Teacher other = (Teacher) o;
+
+        return id != null &&
+                id.equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }
